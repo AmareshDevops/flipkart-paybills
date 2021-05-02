@@ -1,0 +1,117 @@
+{
+  "apiVersion" : "v1",
+  "kind" : "Template",
+  "metadata" : {
+    "annotations" : {
+      "fabric8.paybills/summary" : "Camel route using Spring XML in a standalone Java container",
+      "description" : "# Java Camel Spring QuickStart\r\n\r\nThis quickstart run in a Java standalone container, using Spring with Apache Camel.\r\n\r\nThis example is implemented using solely a Spring XML file (there is no custom Java code).\r\nThe source code is provided in the following XML file `src/main/resources/META-INF/spring/camel-context.xml`,\r\nwhich can be viewed from [github](https://github.com/fabric8io/ipaas-quickstarts/blob/master/quickstart/java/camel-spring/src/main/resources/META-INF/spring/camel-context.xml).\r\n\r\nThis example uses a timer to trigger a message every 5th second that is routed using a content based router, based on\r\nthe message is regarded as high priority or not.\r\n\r\n\r\n### Building\r\n\r\nNavigate to the $IPAAS_QUICKSTART/quickstart/java/camel-spring/ folder and the example can be built with\r\n\r\n    mvn clean install\r\n\r\n\r\n### Running the example locally\r\n\r\nThe example can be run locally using the following Maven goal:\r\n\r\n    mvn exec:java\r\n\r\n\r\n### Running the example in fabric8\r\n\r\nIt is assumed a running Kubernetes platform is already running. If not you can find details how to [get started](http://fabric8.io/guide/getStarted/index.html).\r\n\r\nThe example can be built and deployed using a single goal:\r\n\r\n    mvn -Pf8-local-deploy\r\n\r\nWhen the example runs in fabric8, you can use the OpenShift client tool to inspect the status\r\n\r\nTo list all the running pods:\r\n\r\n    oc get pods\r\n\r\nThen find the name of the pod that runs this quickstart, and output the logs from the running pods with:\r\n\r\n    oc logs <name of pod>\r\n\r\nYou can also use the fabric8 [web console](http://fabric8.io/guide/console.html) to manage the\r\nrunning pods, and view logs and much more.\r\n\r\n\r\n### More details\r\n\r\nYou can find more details about running this [quickstart](http://fabric8.io/guide/quickstarts/running.html) on the website. This also includes instructions how to change the Docker image user and registry.\r\n\r\n",
+      "fabric8.paybills/iconUrl" : "img/icons/camel.svg"
+    },
+    "labels" : { },
+    "name" : "paybills"
+  },
+  "objects" : [ {
+    "apiVersion" : "v1",
+    "kind" : "Service",
+    "metadata" : {
+      "annotations" : {
+        "prometheus.io/port" : "9779",
+        "prometheus.io/scrape" : "true",
+        "fabric8.io/iconUrl" : "img/icons/camel.svg"
+      },
+      "labels" : {
+        "provider" : "fabric8",
+        "project" : "paybills",
+        "version" : "1.0-SNAPSHOT",
+        "group" : "quickstarts"
+      },
+      "name" : "paybills"
+    },
+    "spec" : {
+      "clusterIP" : "None",
+      "deprecatedPublicIPs" : [ ],
+      "externalIPs" : [ ],
+      "ports" : [ {
+        "port" : 9779,
+        "targetPort" : 9779
+      } ],
+      "selector" : {
+        "project" : "paybills",
+        "provider" : "fabric8",
+        "group" : "quickstarts"
+      }
+    }
+  }, {
+    "apiVersion" : "v1",
+    "kind" : "ReplicationController",
+    "metadata" : {
+      "annotations" : {
+        "fabric8.io/iconUrl" : "img/icons/camel.svg",
+        "fabric8.io/git-branch" : "master"
+      },
+      "labels" : {
+        "provider" : "fabric8",
+        "project" : "paybills",
+        "version" : "1.0-SNAPSHOT",
+        "group" : "quickstarts"
+      },
+      "name" : "paybills"
+    },
+    "spec" : {
+      "replicas" : 1,
+      "selector" : {
+        "provider" : "fabric8",
+        "project" : "paybills",
+        "version" : "1.0-SNAPSHOT",
+        "group" : "quickstarts"
+      },
+      "template" : {
+        "metadata" : {
+          "annotations" : { },
+          "labels" : {
+            "provider" : "fabric8",
+            "project" : "paybills",
+            "version" : "1.0-SNAPSHOT",
+            "group" : "quickstarts"
+          }
+        },
+        "spec" : {
+          "containers" : [ {
+            "args" : [ ],
+            "command" : [ ],
+            "env" : [ {
+              "name" : "KUBERNETES_NAMESPACE",
+              "valueFrom" : {
+                "fieldRef" : {
+                  "fieldPath" : "metadata.namespace"
+                }
+              }
+            } ],
+            "image" : "fabric8/paybills:1.0-SNAPSHOT",
+            "name" : "paybills",
+            "ports" : [ {
+              "containerPort" : 8778,
+              "name" : "jolokia"
+            } ],
+            "resources" : {
+              "limits" : {
+                "cpu" : "0",
+                "memory" : "0"
+              },
+              "requests" : {
+                "cpu" : "0",
+                "memory" : "0"
+              }
+            },
+            "securityContext" : { },
+            "volumeMounts" : [ ]
+          } ],
+          "imagePullSecrets" : [ ],
+          "nodeSelector" : { },
+          "volumes" : [ ]
+        }
+      }
+    }
+  } ],
+  "parameters" : [ ]
+}
